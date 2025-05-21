@@ -1,5 +1,5 @@
 #This is MicroPython code intended to run on the Microbit
-def animatie():
+ddef animatie():
     basic.show_leds("""
         . . . . .
         . . . . .
@@ -162,15 +162,12 @@ def on_forever():
         if status != 0:
             status = 0
             radio.send_string(convert_to_text("LRL" + "," + str(leerlingnummer) + "," + "G"))
-            basic.show_icon(IconNames.SWORD)
     elif input.is_gesture(Gesture.SCREEN_UP):
         if status != 1:
             status = 1
             radio.send_string(convert_to_text("LRL" + "," + str(leerlingnummer) + "," + "V"))
-            basic.show_icon(IconNames.QUARTER_NOTE)
     elif input.is_gesture(Gesture.LOGO_DOWN):
         if status != 2:
             status = 2
             radio.send_string(convert_to_text("LRL" + "," + str(leerlingnummer) + "," + "R"))
-            basic.show_icon(IconNames.GHOST)
 basic.forever(on_forever)
