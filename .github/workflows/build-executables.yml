@@ -30,7 +30,7 @@ jobs:
         pyinstaller --onefile --windowed --icon=dice_icon_160194.ico --name=LerarenApp-Windows lerarenApp.py
     
     - name: Upload Windows executable
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: LerarenApp-Windows
         path: software/LerarenApp/dist/LerarenApp-Windows.exe
@@ -68,7 +68,7 @@ jobs:
         zip -r LerarenApp-Mac.zip LerarenApp-Mac.app
     
     - name: Upload macOS executable
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: LerarenApp-Mac
         path: software/LerarenApp/dist/LerarenApp-Mac.zip
@@ -98,7 +98,7 @@ jobs:
         pyinstaller --onefile --windowed --name=LerarenApp-Linux lerarenApp.py
     
     - name: Upload Linux executable
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: LerarenApp-Linux
         path: software/LerarenApp/dist/LerarenApp-Linux
