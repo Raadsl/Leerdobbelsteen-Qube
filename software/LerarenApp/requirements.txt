@@ -1,2 +1,1 @@
-pyserial>=3.5
-tkinter; sys_platform == "linux"
+pyserial
