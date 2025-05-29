@@ -1,7 +1,5 @@
 # Handleiding voor de Microbit Leer-Dobbelsteen
 
-## Ontworpen door J\*\*\*\* \*\*\*\*, L\*\*\*\* \*\*\*\*, Z\*\*\*\* \*\*\*\*, en J\*\*\*\* \*\*\*\*
-
 Deze Microbit is ontworpen als een interactieve dobbelsteen die gebruikers in staat stelt een leerlingnummer in te stellen en daarna een willekeurige status te tonen: groen, rood of vraagteken. De status wordt vervolgens over radio verzonden zodat de leraar een overzicht van de leerlingen en hun status kan zien.
 
 ### **Stap 1: Instellen van het Leerlingnummer**

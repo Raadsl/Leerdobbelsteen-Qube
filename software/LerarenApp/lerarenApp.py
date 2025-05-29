@@ -287,7 +287,7 @@ def update_allowed_students():
         
         allowed_students = set(student_numbers)
         student_names = new_student_names
-        print(f"Toegestane leerlingen bijgewerkt: {sorted(allowed_students)}")
+        print(f"Leerlingen om te ontvangen bijgewerkt: {sorted(allowed_students)}")
         print(f"Leerlingnamen: {student_names}")
         
         # Wis leerlingstatussen voor leerlingen die niet meer in de lijst staan
@@ -372,13 +372,14 @@ def export_log():
 
 # Initialiseer globale variabelen
 allowed_students = set()
-student_names = {}  # Woordenboek om leerlingnamen op te slaan
+student_names = {}  # dict om leerlingnamen op te slaan
 student_statuses = {}
 ser = None
 
 # Stel de tkinter GUI in
 root = tk.Tk()
 root.title("LeerlingDobbelsteen Monitor - Docent Dashboard")
+root.iconbitmap(r'./dice_icon_160194.ico')
 root.geometry('1000x700')
 
 # Maak hoofdframes
