@@ -379,7 +379,7 @@ ser = None
 # Stel de tkinter GUI in
 root = tk.Tk()
 root.title("LeerlingDobbelsteen Monitor - Docent Dashboard")
-root.iconbitmap(r'./dice_icon_160194.ico')
+#root.iconbitmap(r'./dice_icon_160194.ico')
 root.geometry('1000x700')
 
 # Maak hoofdframes
