@@ -13,21 +13,25 @@ jobs:
       exe_path: ${{ steps.build.outputs.exe_path }}
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.12'
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r software/LerarenApp/requirements.txt
           pip install pyinstaller
+
       - name: Build Windows executable
         id: build
         run: |
           cd software/LerarenApp
           pyinstaller --onefile --windowed --icon=dice_icon_160194.ico --name=LerarenApp-Windows lerarenApp.py
-          echo "::set-output name=exe_path::$(pwd)/dist/LerarenApp-Windows.exe"
+          echo "exe_path=$(pwd)/dist/LerarenApp-Windows.exe" >> $GITHUB_OUTPUT
+
       - name: Upload Windows executable
         uses: actions/upload-artifact@v4
         with:
@@ -40,22 +44,28 @@ jobs:
       app_path: ${{ steps.build.outputs.app_path }}
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.12'
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r software/LerarenApp/requirements.txt
           pip install pyinstaller
-      - name: Build macOS executable
+
+      - name: Build and package macOS app
         id: build
         run: |
           cd software/LerarenApp
           pyinstaller --onefile --windowed --name=LerarenApp-Mac lerarenApp.py
-          echo "::set-output name=app_path::$(pwd)/dist/LerarenApp-Mac.app"
-      - name: Upload macOS executable
+          # Zip the .app bundle so it can be uploaded as a single file
+          zip -r LerarenApp-Mac.zip dist/LerarenApp-Mac.app
+          echo "app_path=$(pwd)/LerarenApp-Mac.zip" >> $GITHUB_OUTPUT
+
+      - name: Upload macOS ZIP
         uses: actions/upload-artifact@v4
         with:
           name: LerarenApp-Mac
@@ -67,21 +77,25 @@ jobs:
       linux_path: ${{ steps.build.outputs.linux_path }}
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.12'
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r software/LerarenApp/requirements.txt
           pip install pyinstaller
+
       - name: Build Linux executable
         id: build
         run: |
           cd software/LerarenApp
           pyinstaller --onefile --windowed --name=LerarenApp-Linux lerarenApp.py
-          echo "::set-output name=linux_path::$(pwd)/dist/LerarenApp-Linux"
+          echo "linux_path=$(pwd)/dist/LerarenApp-Linux" >> $GITHUB_OUTPUT
+
       - name: Upload Linux executable
         uses: actions/upload-artifact@v4
         with:
@@ -101,7 +115,7 @@ jobs:
           name: LerarenApp-Windows
           path: artifacts/windows
 
-      - name: Download macOS executable
+      - name: Download macOS ZIP
         uses: actions/download-artifact@v4
         with:
           name: LerarenApp-Mac
@@ -114,14 +128,15 @@ jobs:
           path: artifacts/linux
 
       - name: Generate tag name
-        run: echo "TAG_NAME=$(date +'%Y.%m.%d-%H%M%S')" >> $GITHUB_ENV
+        run: |
+          echo "TAG_NAME=$(date +'%Y.%m.%d-%H%M%S')" >> $GITHUB_ENV
 
       - name: Create GitHub Release
         run: |
           gh release create "$TAG_NAME" \
-            artifacts/windows/LerarenApp-Windows.exe \
-            artifacts/macos/LerarenApp-Mac.app \
-            artifacts/linux/LerarenApp-Linux \
+            "artifacts/windows/LerarenApp-Windows.exe" \
+            "artifacts/macos/LerarenApp-Mac.zip" \
+            "artifacts/linux/LerarenApp-Linux" \
             --title "Release $TAG_NAME" \
             --notes "Automated release of LerarenApp at $TAG_NAME."
         env:
