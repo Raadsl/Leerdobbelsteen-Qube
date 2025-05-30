@@ -88,21 +88,41 @@ jobs:
           name: LerarenApp-Linux
           path: ${{ steps.build.outputs.linux_path }}
 
-  release:
+    release:
     needs: [build-windows, build-macos, build-linux]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Download Windows executable
+        uses: actions/download-artifact@v4
+        with:
+          name: LerarenApp-Windows
+          path: artifacts/windows
+
+      - name: Download macOS executable
+        uses: actions/download-artifact@v4
+        with:
+          name: LerarenApp-Mac
+          path: artifacts/macos
+
+      - name: Download Linux executable
+        uses: actions/download-artifact@v4
+        with:
+          name: LerarenApp-Linux
+          path: artifacts/linux
+
+      - name: Generate tag name
+        run: echo "TAG_NAME=$(date +'%Y.%m.%d-%H%M%S')" >> $GITHUB_ENV
+
       - name: Create GitHub Release
-        id: create_release
         run: |
-          tag_name="v1.0.0"
-          gh release create $tag_name \
-            software/LerarenApp/dist/LerarenApp-Windows.exe \
-            software/LerarenApp/dist/LerarenApp-Mac.app \
-            software/LerarenApp/dist/LerarenApp-Linux \
-            --title "Release $tag_name" \
-            --notes "Initial release of LerarenApp."
+          gh release create "$TAG_NAME" \
+            artifacts/windows/LerarenApp-Windows.exe \
+            artifacts/macos/LerarenApp-Mac.app \
+            artifacts/linux/LerarenApp-Linux \
+            --title "Release $TAG_NAME" \
+            --notes "Automated release of LerarenApp at $TAG_NAME."
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
