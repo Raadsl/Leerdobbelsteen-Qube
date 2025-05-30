@@ -1,104 +1,108 @@
-name: Build Executables
+name: Build and Release Executables
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
   build-windows:
     runs-on: windows-latest
+    outputs:
+      exe_path: ${{ steps.build.outputs.exe_path }}
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.12'
-    
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r software/LerarenApp/requirements.txt
-        pip install pyinstaller
-    
-    - name: Build Windows executable
-      run: |
-        cd software/LerarenApp
-        pyinstaller --onefile --windowed --icon=dice_icon_160194.ico --name=LerarenApp-Windows lerarenApp.py
-    
-    - name: Upload Windows executable
-      uses: actions/upload-artifact@v4
-      with:
-        name: LerarenApp-Windows
-        path: software/LerarenApp/dist/LerarenApp-Windows.exe
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r software/LerarenApp/requirements.txt
+          pip install pyinstaller
+      - name: Build Windows executable
+        id: build
+        run: |
+          cd software/LerarenApp
+          pyinstaller --onefile --windowed --icon=dice_icon_160194.ico --name=LerarenApp-Windows lerarenApp.py
+          echo "::set-output name=exe_path::$(pwd)/dist/LerarenApp-Windows.exe"
+      - name: Upload Windows executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: LerarenApp-Windows
+          path: ${{ steps.build.outputs.exe_path }}
 
   build-macos:
     runs-on: macos-latest
+    outputs:
+      app_path: ${{ steps.build.outputs.app_path }}
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.12'
-    
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r software/LerarenApp/requirements.txt
-        pip install pyinstaller
-    
-    - name: Convert icon to icns (Mac format)
-      run: |
-        cd software/LerarenApp
-        # Create iconset directory
-        mkdir dice_icon.iconset
-        # You may need to add icon conversion steps here if needed
-        # For now, we'll skip the icon for Mac build
-    
-    - name: Build macOS executable
-      run: |
-        cd software/LerarenApp
-        pyinstaller --onefile --windowed --name=LerarenApp-Mac lerarenApp.py
-        # Create a zip of the .app for easier distribution
-        cd dist
-        zip -r LerarenApp-Mac.zip LerarenApp-Mac.app
-    
-    - name: Upload macOS executable
-      uses: actions/upload-artifact@v4
-      with:
-        name: LerarenApp-Mac
-        path: software/LerarenApp/dist/LerarenApp-Mac.zip
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r software/LerarenApp/requirements.txt
+          pip install pyinstaller
+      - name: Build macOS executable
+        id: build
+        run: |
+          cd software/LerarenApp
+          pyinstaller --onefile --windowed --name=LerarenApp-Mac lerarenApp.py
+          echo "::set-output name=app_path::$(pwd)/dist/LerarenApp-Mac.app"
+      - name: Upload macOS executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: LerarenApp-Mac
+          path: ${{ steps.build.outputs.app_path }}
 
   build-linux:
     runs-on: ubuntu-latest
+    outputs:
+      linux_path: ${{ steps.build.outputs.linux_path }}
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.12'
-    
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r software/LerarenApp/requirements.txt
-        pip install pyinstaller
-        # Install Python dev packages for shared libraries
-        sudo apt-get update
-        sudo apt-get install -y python3-dev
-    
-    - name: Build Linux executable
-      run: |
-        cd software/LerarenApp
-        pyinstaller --onefile --windowed --name=LerarenApp-Linux lerarenApp.py
-    
-    - name: Upload Linux executable
-      uses: actions/upload-artifact@v4
-      with:
-        name: LerarenApp-Linux
-        path: software/LerarenApp/dist/LerarenApp-Linux
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r software/LerarenApp/requirements.txt
+          pip install pyinstaller
+      - name: Build Linux executable
+        id: build
+        run: |
+          cd software/LerarenApp
+          pyinstaller --onefile --windowed --name=LerarenApp-Linux lerarenApp.py
+          echo "::set-output name=linux_path::$(pwd)/dist/LerarenApp-Linux"
+      - name: Upload Linux executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: LerarenApp-Linux
+          path: ${{ steps.build.outputs.linux_path }}
+
+  release:
+    needs: [build-windows, build-macos, build-linux]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Create GitHub Release
+        id: create_release
+        run: |
+          tag_name="v1.0.0"
+          gh release create $tag_name \
+            software/LerarenApp/dist/LerarenApp-Windows.exe \
+            software/LerarenApp/dist/LerarenApp-Mac.app \
+            software/LerarenApp/dist/LerarenApp-Linux \
+            --title "Release $tag_name" \
+            --notes "Initial release of LerarenApp."
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
