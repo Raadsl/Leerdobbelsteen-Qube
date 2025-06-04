@@ -594,14 +594,14 @@ def periodic_refresh():
         if has_active_status:
             refresh_student_display()
         
-        # Plan de volgende refresh over 10 seconden
-        root.after(10000, periodic_refresh)
+        # Plan de volgende refresh over 5 seconden
+        root.after(5000, periodic_refresh)
     except Exception as e:
         error_msg = f"Fout in periodic_refresh: {e}"
         print(error_msg)
         log_to_activity(error_msg, is_error=True)
         # Plan opnieuw ondanks fout
-        root.after(10000, periodic_refresh)
+        root.after(5000, periodic_refresh) # 5 sec
 
 # Initialiseer globale variabelen
 allowed_students = set()
