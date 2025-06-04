@@ -124,7 +124,7 @@ def process_serial_data():
             time.sleep(0.1)  # Kleine vertraging
 
 def reconnect_serial():
-    global ser
+    global ser, manual_disconnect
     try:
         if ser:
             try:
@@ -140,6 +140,7 @@ def reconnect_serial():
         if selected_port:
             try:
                 ser = serial.Serial(selected_port, 115200, timeout=1)
+                manual_disconnect = False  # Reset manual disconnect flag on successful reconnection
                 success_msg = f"Opnieuw verbonden met {selected_port}"
                 print(success_msg)
                 log_to_activity(success_msg)
@@ -414,7 +415,7 @@ def refresh_ports():
 
 def connect_to_port():
     """Verbind met de geselecteerde seriële poort"""
-    global ser
+    global ser, manual_disconnect
     selected_port = port_selector.get()
     if not selected_port:
         messagebox.showwarning("Waarschuwing", "Selecteer eerst een poort")
@@ -428,6 +429,7 @@ def connect_to_port():
     
     try:
         ser = serial.Serial(selected_port, 115200, timeout=1)
+        manual_disconnect = False  # Reset manual disconnect flag on successful connection
         success_msg = f"Verbonden met {selected_port}"
         print(success_msg)
         log_to_activity(success_msg)
@@ -442,12 +444,13 @@ def connect_to_port():
 
 def disconnect_from_port():
     """Verbreek verbinding met de seriële poort"""
-    global ser
+    global ser, manual_disconnect
     if ser is not None:
         try:
             ser.close()
             ser = None
-            success_msg = "Verbinding met seriële poort verbroken"
+            manual_disconnect = True  # Mark as manual disconnect to prevent auto-reconnect
+            success_msg = "Verbinding met seriële poort handmatig verbroken"
             print(success_msg)
             log_to_activity(success_msg)
             update_connection_status("Niet verbonden", "gray")
@@ -516,6 +519,11 @@ def check_connection_health():
     try:
         current_time = time.time()
         
+        # Skip health check if user manually disconnected
+        if manual_disconnect:
+            root.after(10000, check_connection_health)  # Check again in 10 seconds
+            return
+        
         # Controleer of we een actieve verbinding hebben
         if ser is None or not ser.is_open:
             if port_selector.get():  # Alleen herverbinden als er een poort geselecteerd is
@@ -578,6 +586,23 @@ def check_connection_health():
         log_to_activity(error_msg, is_error=True)
         root.after(10000, check_connection_health)  # Probeer altijd opnieuw over 10 seconden
 
+def periodic_refresh():
+    """Periodiek verversen van de studentenweergave om durations bij te werken"""
+    try:
+        # Alleen verversen als er leerlingen met V of R status zijn
+        has_active_status = any(info.get('code') in ['V', 'R'] for info in student_statuses.values())
+        if has_active_status:
+            refresh_student_display()
+        
+        # Plan de volgende refresh over 10 seconden
+        root.after(10000, periodic_refresh)
+    except Exception as e:
+        error_msg = f"Fout in periodic_refresh: {e}"
+        print(error_msg)
+        log_to_activity(error_msg, is_error=True)
+        # Plan opnieuw ondanks fout
+        root.after(10000, periodic_refresh)
+
 # Initialiseer globale variabelen
 allowed_students = set()
 student_names = {}  # dict om leerlingnamen op te slaan
@@ -586,6 +611,7 @@ ser = None
 last_heartbeat = None
 last_reconnect_time = None
 last_connection_test = None
+manual_disconnect = False  # Track if user manually disconnected
 
 # Stel de tkinter GUI in
 root = tk.Tk()
@@ -679,6 +705,9 @@ thread.start()
 
 # Start de gezondheidscontrole
 root.after(10000, check_connection_health)  # Start na 10 seconden
+
+# Start periodieke refresh voor real-time duration updates
+root.after(5000, periodic_refresh)  # Start na 5 seconden
 
 # Initialiseer
 refresh_ports()
