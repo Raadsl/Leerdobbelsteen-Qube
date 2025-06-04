@@ -35,12 +35,12 @@ Na het instellen van het leerlingnummer is de Microbit klaar voor gebruik als do
 
    * Kantel de microbit naar beneden (scherm naar beneden).
 
-2. **Scherm omhoog : Vraagteken – Er is een vraag**:  
+2. **Scherm omhoog : Rood – Er is een probleem**:  
    ![][image2]
 
    * Kantel de microbit omhoog (scherm naar boven).
 
-3. **Logo-kant omlaag: Rood – Er is een probleem**:  
+3. **Logo-kant omlaag: Vraagteken – Er is een vraag**:  
    ![][image3]
 
    * Kantel de microbit zo dat de logo-kant zich beneden bevindt, zoals te zien in de afbeelding.
