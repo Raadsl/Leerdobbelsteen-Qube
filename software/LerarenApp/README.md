@@ -4,6 +4,6 @@ Dit is het dashboard waar je alle verbonden leerlingen kan zien met een "Qube". 
 
 De LerarenMicrobit moet echter wel aangesloten zijn op de computer om het te laten werken!
 
-Voorbeeld dashboard
+💡 **Tip**: Maak een tekstbestand voor elke klas met de leerlingnummers en namen zodat je deze snel kunt kopiëren en plakken.
 
-![foto van lerarenapp dashboard](dashboard.png)
+Todo: Make the pythonapp not all code in one file

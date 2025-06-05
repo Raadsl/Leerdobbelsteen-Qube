@@ -1,5 +1,4 @@
-#This is MicroPython code intended to run on the Microbit
-ddef animatie():
+def animatie():
     basic.show_leds("""
         . . . . .
         . . . . .
@@ -154,20 +153,23 @@ if not (leerlingnummer):
 else:
     basic.show_string("" + str(leerlingnummer))
 
-def on_forever():
+def on_forever(): # Send radio messages twice in case of missed messages
     global status
     if input.button_is_pressed(Button.A) and input.button_is_pressed(Button.B) and input.logo_is_pressed():
         setup()
     if input.is_gesture(Gesture.SCREEN_DOWN):
         if status != 0:
             status = 0
-            radio.send_string(convert_to_text("LRL" + "," + str(leerlingnummer) + "," + "G"))
-    elif input.is_gesture(Gesture.SCREEN_UP):
+            radio.send_string(convert_to_text("L" + "," + ("" + str(leerlingnummer)) + "," + "G"))
+            radio.send_string(convert_to_text("L" + "," + ("" + str(leerlingnummer)) + "," + "G"))
+    elif input.is_gesture(Gesture.LOGO_UP):
         if status != 1:
             status = 1
-            radio.send_string(convert_to_text("LRL" + "," + str(leerlingnummer) + "," + "V"))
-    elif input.is_gesture(Gesture.LOGO_DOWN):
+            radio.send_string(convert_to_text("L" + "," + ("" + str(leerlingnummer)) + "," + "V"))
+            radio.send_string(convert_to_text("L" + "," + ("" + str(leerlingnummer)) + "," + "V"))
+    elif input.is_gesture(Gesture.SCREEN_UP):
         if status != 2:
             status = 2
-            radio.send_string(convert_to_text("LRL" + "," + str(leerlingnummer) + "," + "R"))
+            radio.send_string(convert_to_text("L" + "," + ("" + str(leerlingnummer)) + "," + "R"))
+            radio.send_string(convert_to_text("L" + "," + ("" + str(leerlingnummer)) + "," + "R"))
 basic.forever(on_forever)
