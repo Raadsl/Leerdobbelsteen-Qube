@@ -1,9 +1,8 @@
-# Lerarenapp
+# Qube Monitor App
 
 Dit is het dashboard waar je alle verbonden leerlingen kan zien met een "Qube". De leerlingnummers van de klas die je wilt ontvangen moet je wel invullen, dus we raden aan een bestand aan te maken voor elke klas zodat je het snel kan copy-pasten.
 
-De LerarenMicrobit moet echter wel aangesloten zijn op de computer om het te laten werken!
+De receiver-micribit moet echter wel aangesloten zijn op de computer om het te laten werken!
 
 💡 **Tip**: Maak een tekstbestand voor elke klas met de leerlingnummers en namen zodat je deze snel kunt kopiëren en plakken.
 
-Todo: Make the pythonapp not all code in one file

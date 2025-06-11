@@ -25,22 +25,22 @@ jobs:
         shell: bash
         run: |
           python -m pip install --upgrade pip
-          pip install -r software/LerarenApp/requirements.txt
+          pip install -r software/QubeMonitorApp/requirements.txt
           pip install pyinstaller
 
       - name: Build Windows executable
         shell: bash
         run: |
-          cd software/LerarenApp
+          cd software/QubeMonitorApp
           pyinstaller --onefile --windowed \
             --icon=dice_icon_160194.ico \
-            --name=LerarenApp-Windows lerarenApp.py
+            --name=QubeMonitor-Windows qubeMonitor.py
 
       - name: Upload Windows executable
         uses: actions/upload-artifact@v4
         with:
-          name: LerarenApp-Windows
-          path: software/LerarenApp/dist/LerarenApp-Windows.exe
+          name: QubeMonitor-Windows
+          path: software/QubeMonitorApp/dist/QubeMonitor-Windows.exe
 
   build-macos:
     runs-on: macos-latest
@@ -55,25 +55,25 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r software/LerarenApp/requirements.txt
+          pip install -r software/QubeMonitorApp/requirements.txt
           pip install pyinstaller
 
       - name: Build macOS executable
         run: |
-          cd software/LerarenApp
+          cd software/QubeMonitorApp
           pyinstaller --onefile --windowed \
-            --name=LerarenApp-Mac lerarenApp.py
+            --name=QubeMonitor-Mac qubeMonitor.py
 
       - name: Archive macOS app bundle
         run: |
-          cd software/LerarenApp/dist
-          zip -r LerarenApp-Mac.zip LerarenApp-Mac.app
+          cd software/QubeMonitorApp/dist
+          zip -r QubeMonitor-Mac.zip QubeMonitor-Mac.app
 
       - name: Upload macOS executable
         uses: actions/upload-artifact@v4
         with:
-          name: LerarenApp-Mac
-          path: software/LerarenApp/dist/LerarenApp-Mac.zip
+          name: QubeMonitor-Mac
+          path: software/QubeMonitorApp/dist/QubeMonitor-Mac.zip
 
   build-linux:
     runs-on: ubuntu-latest
@@ -88,20 +88,20 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r software/LerarenApp/requirements.txt
+          pip install -r software/QubeMonitorApp/requirements.txt
           pip install pyinstaller
 
       - name: Build Linux executable
         run: |
-          cd software/LerarenApp
+          cd software/QubeMonitorApp
           pyinstaller --onefile --windowed \
-            --name=LerarenApp-Linux lerarenApp.py
+            --name=QubeMonitor-Linux qubeMonitor.py
 
       - name: Upload Linux executable
         uses: actions/upload-artifact@v4
         with:
-          name: LerarenApp-Linux
-          path: software/LerarenApp/dist/LerarenApp-Linux
+          name: QubeMonitor-Linux
+          path: software/QubeMonitorApp/dist/QubeMonitor-Linux
 
   release:
     needs: [build-windows, build-macos, build-linux]
@@ -121,10 +121,10 @@ jobs:
       - name: Create GitHub Release
         run: |
           gh release create "$TAG_NAME" \
-            "artifacts/LerarenApp-Windows/LerarenApp-Windows.exe" \
-            "artifacts/LerarenApp-Mac/LerarenApp-Mac.zip" \
-            "artifacts/LerarenApp-Linux/LerarenApp-Linux" \
+            "artifacts/QubeMonitor-Windows/QubeMonitor-Windows.exe" \
+            "artifacts/QubeMonitor-Mac/QubeMonitor-Mac.zip" \
+            "artifacts/QubeMonitor-Linux/QubeMonitor-Linux" \
             --title "Release $TAG_NAME" \
-            --notes "Automated release of LerarenApp at $TAG_NAME."
+            --notes "Automated release of QubeMonitor at $TAG_NAME."
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

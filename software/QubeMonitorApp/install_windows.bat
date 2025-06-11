@@ -1,5 +1,5 @@
 @echo off
-echo Installing LerarenApp...
+echo Installing Qube Monitor...
 echo.
 
 :: Check if Python is installed
@@ -25,23 +25,23 @@ echo Installing required packages...
 python -m pip install pyserial
 
 :: Check if the main script exists
-if not exist "lerarenApp.py" (
-    echo lerarenApp.py not found in current directory.
-    echo Please make sure this installer is in the same folder as lerarenApp.py
+if not exist "qubeMonitor.py" (
+    echo qubeMonitor.py not found in current directory.
+    echo Please make sure this installer is in the same folder as qubeMonitor.py
     pause
     exit /b 1
 )
 
 :: Create a batch file to run the app
-echo @echo off > run_lerarenapp.bat
-echo cd /d "%~dp0" >> run_lerarenapp.bat
-echo python lerarenApp.py >> run_lerarenapp.bat
-echo pause >> run_lerarenapp.bat
+echo @echo off > run_qubemonitor.bat
+echo cd /d "%~dp0" >> run_qubemonitor.bat
+echo python qubeMonitor.py >> run_qubemonitor.bat
+echo pause >> run_qubemonitor.bat
 
 echo.
 echo Installation complete!
 echo.
-echo To run the app, double-click on "run_lerarenapp.bat"
-echo or run "python lerarenApp.py" in this folder.
+echo To run the app, double-click on "run_qubemonitor.bat"
+echo or run "python qubeMonitor.py" in this folder.
 echo.
 pause

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Installing LerarenApp for Mac..."
+echo "Installing Qube Monitor for Mac..."
 echo
 
 # Check if Python 3 is installed
@@ -22,24 +22,24 @@ echo "Installing required packages..."
 python3 -m pip install pyserial
 
 # Check if the main script exists
-if [ ! -f "lerarenApp.py" ]; then
-    echo "lerarenApp.py not found in current directory."
-    echo "Please make sure this installer is in the same folder as lerarenApp.py"
+if [ ! -f "qubeMonitor.py" ]; then
+    echo "qubeMonitor.py not found in current directory."
+    echo "Please make sure this installer is in the same folder as qubeMonitor.py"
     exit 1
 fi
 
 # Create a shell script to run the app
-cat > run_lerarenapp.sh << 'EOF'
+cat > run_qubemonitor.sh << 'EOF'
 #!/bin/bash
 cd "$(dirname "$0")"
-python3 lerarenApp.py
+python3 qubeMonitor.py
 EOF
 
-chmod +x run_lerarenapp.sh
+chmod +x run_qubemonitor.sh
 
 echo
 echo "Installation complete!"
 echo
-echo "To run the app, double-click on 'run_lerarenapp.sh'"
-echo "or run 'python3 lerarenApp.py' in this folder."
+echo "To run the app, double-click on 'run_qubemonitor.sh'"
+echo "or run 'python3 qubeMonitor.py' in this folder."
 echo

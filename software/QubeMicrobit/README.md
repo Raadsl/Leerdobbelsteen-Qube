@@ -1,4 +1,4 @@
-# Leerling Microbit Dobbelsteen - De Qube
+# Qube Microbit
 
 https://makecode.microbit.org/S75591-81935-61536-36336
 
