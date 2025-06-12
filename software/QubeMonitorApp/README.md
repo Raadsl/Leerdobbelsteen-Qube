@@ -13,5 +13,8 @@ Met dit dashboard kun je eenvoudig alle verbonden leerlingen met een "Qube" in r
 3. **Verbind de app met de juiste poort**
    - Zodra je bent verbonden met de juiste poort zul je zien dat de app verbonden is. Dan is alles klaar voor gebruik.
 
-> 💡 **Handig:** Houd per klas een tekstbestand bij met leerlingnummers en namen voor snel gebruik.
-
+💡 **Handig:** Houd per klas een tekstbestand bij met leerlingnummers en namen voor snel gebruik.
+<p align='center'>Hieronder is de Qube Monitor te zien in actie</p>
+<p align="center">
+  <img src="screenshot.png" alt="Qube Monitor screenshot" width="50%"/>
+</p>

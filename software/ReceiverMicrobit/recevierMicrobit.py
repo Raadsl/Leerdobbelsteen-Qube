@@ -6,7 +6,7 @@ def on_data_received():
     radio.send_string(serial.read_line())
 serial.on_data_received(serial.delimiters(Delimiters.NEW_LINE), on_data_received)
 
-radio.set_group(146) # moet hetzeflde zijn als leerlingcubemicrobit
+radio.set_group(147) # moet hetzeflde zijn als leerlingcubemicrobit
 
 def on_forever():
     pass

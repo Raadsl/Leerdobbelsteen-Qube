@@ -1,3 +1,3 @@
-De receiver-microbit code is volledige hetzelfde als van Rolf Huts' project en werkt hetzelfde.
+De receiver-microbit code is volledige hetzelfde als van Rolf Huts' project en werkt hetzelfde. Alle ontvangen radio-signalen kunnen hierdoor worden gelezen door de Qube Monitor App.
 
-- https://makecode.microbit.org/88775-15644-66481-43466
+- De makecode is hier beschikbaar: https://makecode.microbit.org/S06526-61168-94744-19453

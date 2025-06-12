@@ -56,7 +56,7 @@ Veel plezier met het gebruik van de leer-dobbelsteen\!
 
 LET OP: Deel deze technische informatie niet met leerlingen.
 
-* De communicatie via radio werkt alleen als andere Microbits hetzelfde radio-groepsnummer gebruiken (in dit geval groep 147).  
+* De communicatie via radio werkt alleen als andere Microbits hetzelfde radio-groepsnummer gebruiken (in dit geval groep 147). Dit kan makkelijk in de code worden aangepast als het moet.
 * Over de radio wordt het volgende bericht twee keer verzonden: L,{LEERLINGNUMMER},{STATUS}’.  
   * {LEERLINGNUMMER} wordt vervangen door het leerlingnummer gegeven tijdens de setup  
   * {STATUS} is G (groen), V (vraag) of R (rood). Deze worden geactiveerd door de posities beschreven in Stap 2\.   
