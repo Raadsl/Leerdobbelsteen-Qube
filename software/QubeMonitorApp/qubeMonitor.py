@@ -4,6 +4,8 @@ import serial
 import threading
 import time
 import serial.tools.list_ports
+import sys
+import os
 
 def log_to_activity(message, is_error=False, log_type="INFO"):
     """Voeg een bericht toe aan het activiteitenlog met categorisatie
@@ -114,7 +116,7 @@ def export_log():
         )
         if filename:
             with open(filename, 'w', encoding='utf-8') as f:
-                f.write(f"LeerlingDobbelsteen Log Export - {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
+                f.write(f"Qube Monitor Log Export - {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
                 f.write("="*60 + "\n\n")
                 
                 for entry in activity_log_entries:
@@ -1023,7 +1025,45 @@ log_filter_vars = {}  # Variabelen voor log filtering
 # Stel de tkinter GUI in
 root = tk.Tk()
 root.title("Qube Monitor - Docent Dashboard")
-#root.iconbitmap(r'./dice_icon_160194.ico')
+
+def resource_path(relative_path):
+    """Get absolute path to resource, works for dev and for PyInstaller"""
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(base_path, relative_path)
+
+# Set icon with proper path handling for both development and .exe
+def set_window_icon():
+    try:
+        # Get the correct path to the icon file
+        icon_path = resource_path('dice_icon_160194.ico')
+        
+        if os.path.exists(icon_path):
+            root.iconbitmap(icon_path)
+            print(f"Icon set successfully: {icon_path}")
+        else:
+            print(f"Icon file not found: {icon_path}")
+            # Try alternative path for development
+            dev_icon_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'dice_icon_160194.ico')
+            if os.path.exists(dev_icon_path):
+                root.iconbitmap(dev_icon_path)
+                print(f"Icon set successfully (dev path): {dev_icon_path}")
+            else:
+                print(f"Icon file not found in dev path: {dev_icon_path}")
+            
+    except Exception as e:
+        print(f"Could not set window icon: {e}")
+        # Try to set without path as fallback
+        try:
+            root.iconbitmap('dice_icon_160194.ico')
+            print("Icon set using relative path")
+        except Exception as e2:
+            print(f"Fallback icon setting also failed: {e2}")
+
+set_window_icon()
 root.geometry('1000x700')
 
 # Maak hoofdframes

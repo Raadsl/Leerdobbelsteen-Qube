@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
@@ -32,15 +32,13 @@ jobs:
         shell: bash
         run: |
           cd software/QubeMonitorApp
-          pyinstaller --onefile --windowed \
-            --icon=dice_icon_160194.ico \
-            --name=QubeMonitor-Windows qubeMonitor.py
+          pyinstaller --onefile --windowed --name QubeMonitor --icon=dice_icon_160194.ico --add-data "dice_icon_160194.ico;." --hidden-import serial.tools.list_ports --hidden-import tkinter --hidden-import tkinter.ttk --hidden-import tkinter.messagebox --hidden-import tkinter.scrolledtext --hidden-import threading --hidden-import time qubeMonitor.py
 
       - name: Upload Windows executable
         uses: actions/upload-artifact@v4
         with:
           name: QubeMonitor-Windows
-          path: software/QubeMonitorApp/dist/QubeMonitor-Windows.exe
+          path: software/QubeMonitorApp/dist/QubeMonitor.exe
 
   build-macos:
     runs-on: macos-latest
@@ -48,7 +46,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
@@ -61,13 +59,12 @@ jobs:
       - name: Build macOS executable
         run: |
           cd software/QubeMonitorApp
-          pyinstaller --onefile --windowed \
-            --name=QubeMonitor-Mac qubeMonitor.py
+          pyinstaller --onefile --windowed --name QubeMonitor-Mac --icon=dice_icon_160194.ico --add-data "dice_icon_160194.ico:." --hidden-import serial.tools.list_ports --hidden-import tkinter --hidden-import tkinter.ttk --hidden-import tkinter.messagebox --hidden-import tkinter.scrolledtext --hidden-import threading --hidden-import time qubeMonitor.py
 
       - name: Archive macOS app bundle
         run: |
           cd software/QubeMonitorApp/dist
-          zip -r QubeMonitor-Mac.zip QubeMonitor-Mac.app
+          zip -r QubeMonitor-Mac.zip QubeMonitor-Mac
 
       - name: Upload macOS executable
         uses: actions/upload-artifact@v4
@@ -81,7 +78,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
@@ -94,8 +91,7 @@ jobs:
       - name: Build Linux executable
         run: |
           cd software/QubeMonitorApp
-          pyinstaller --onefile --windowed \
-            --name=QubeMonitor-Linux qubeMonitor.py
+          pyinstaller --onefile --windowed --name QubeMonitor-Linux --icon=dice_icon_160194.ico --add-data "dice_icon_160194.ico:." --hidden-import serial.tools.list_ports --hidden-import tkinter --hidden-import tkinter.ttk --hidden-import tkinter.messagebox --hidden-import tkinter.scrolledtext --hidden-import threading --hidden-import time qubeMonitor.py
 
       - name: Upload Linux executable
         uses: actions/upload-artifact@v4
@@ -121,7 +117,7 @@ jobs:
       - name: Create GitHub Release
         run: |
           gh release create "$TAG_NAME" \
-            "artifacts/QubeMonitor-Windows/QubeMonitor-Windows.exe" \
+            "artifacts/QubeMonitor-Windows/QubeMonitor.exe" \
             "artifacts/QubeMonitor-Mac/QubeMonitor-Mac.zip" \
             "artifacts/QubeMonitor-Linux/QubeMonitor-Linux" \
             --title "Release $TAG_NAME" \

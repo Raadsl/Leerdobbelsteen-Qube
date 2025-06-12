@@ -111,7 +111,7 @@ def setup():
     for lln_cursor in range(6):
         basic.show_string("" + str(getal))
         while not (input.logo_is_pressed()):
-            if input.button_is_pressed(Button.A):
+            if input.button_is_pressed(Button.B):
                 getal += 1
                 if getal < 0:
                     getal = 9
@@ -119,7 +119,7 @@ def setup():
                     getal = 0
                 lijst[lln_cursor] = Math.constrain(getal, 0, 9)
                 basic.show_string("" + str(Math.constrain(getal, 0, 9)))
-            elif input.button_is_pressed(Button.B):
+            elif input.button_is_pressed(Button.A):
                 getal += -1
                 if getal < 0:
                     getal = 9
@@ -153,7 +153,7 @@ if not (leerlingnummer):
 else:
     basic.show_string("" + str(leerlingnummer))
 
-def on_forever(): # Send radio messages twice in case of missed messages
+def on_forever():
     global status
     if input.button_is_pressed(Button.A) and input.button_is_pressed(Button.B) and input.logo_is_pressed():
         setup()
