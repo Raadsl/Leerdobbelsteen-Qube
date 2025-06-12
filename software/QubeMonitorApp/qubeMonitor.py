@@ -1039,7 +1039,7 @@ def resource_path(relative_path):
 def set_window_icon():
     try:
         # Get the correct path to the icon file
-        icon_path = resource_path('dice_icon_160194.ico')
+        icon_path = resource_path('qube_monitor.ico')
         
         if os.path.exists(icon_path):
             root.iconbitmap(icon_path)
@@ -1047,7 +1047,7 @@ def set_window_icon():
         else:
             print(f"Icon file not found: {icon_path}")
             # Try alternative path for development
-            dev_icon_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'dice_icon_160194.ico')
+            dev_icon_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'qube_monitor.ico')
             if os.path.exists(dev_icon_path):
                 root.iconbitmap(dev_icon_path)
                 print(f"Icon set successfully (dev path): {dev_icon_path}")
@@ -1058,7 +1058,7 @@ def set_window_icon():
         print(f"Could not set window icon: {e}")
         # Try to set without path as fallback
         try:
-            root.iconbitmap('dice_icon_160194.ico')
+            root.iconbitmap('qube_monitor.ico')
             print("Icon set using relative path")
         except Exception as e2:
             print(f"Fallback icon setting also failed: {e2}")
