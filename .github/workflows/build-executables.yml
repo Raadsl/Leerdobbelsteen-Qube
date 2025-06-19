@@ -32,7 +32,16 @@ jobs:
         shell: bash
         run: |
           cd software/QubeMonitorApp
-          pyinstaller --onefile --windowed --name QubeMonitor --icon=qube_monitor.ico --add-data "qube_monitor.ico;." --hidden-import serial.tools.list_ports --hidden-import tkinter --hidden-import tkinter.ttk --hidden-import tkinter.messagebox --hidden-import tkinter.scrolledtext --hidden-import threading --hidden-import time qubeMonitor.py
+          pyinstaller --onefile --windowed --name QubeMonitor --icon=qube_monitor.ico \
+            --add-data "qube_monitor.ico;." \
+            --add-data "qube_monitor.png;." \
+            --hidden-import serial.tools.list_ports \
+            --hidden-import tkinter --hidden-import tkinter.ttk --hidden-import tkinter.messagebox \
+            --hidden-import tkinter.scrolledtext --hidden-import tkinter.filedialog \
+            --hidden-import threading --hidden-import time --hidden-import queue --hidden-import random \
+            --hidden-import config --hidden-import gui --hidden-import serial_manager \
+            --hidden-import student_manager --hidden-import log_manager \
+            main.py
 
       - name: Upload Windows executable
         uses: actions/upload-artifact@v4
@@ -59,7 +68,16 @@ jobs:
       - name: Build macOS executable
         run: |
           cd software/QubeMonitorApp
-          pyinstaller --onedir --windowed --name QubeMonitor-Mac --icon=qube_monitor.ico --add-data "qube_monitor.ico:." --hidden-import serial.tools.list_ports --hidden-import tkinter --hidden-import tkinter.ttk --hidden-import tkinter.messagebox --hidden-import tkinter.scrolledtext --hidden-import threading --hidden-import time qubeMonitor.py
+          pyinstaller --onedir --windowed --name QubeMonitor-Mac --icon=qube_monitor.ico \
+            --add-data "qube_monitor.ico:." \
+            --add-data "qube_monitor.png:." \
+            --hidden-import serial.tools.list_ports \
+            --hidden-import tkinter --hidden-import tkinter.ttk --hidden-import tkinter.messagebox \
+            --hidden-import tkinter.scrolledtext --hidden-import tkinter.filedialog \
+            --hidden-import threading --hidden-import time --hidden-import queue --hidden-import random \
+            --hidden-import config --hidden-import gui --hidden-import serial_manager \
+            --hidden-import student_manager --hidden-import log_manager \
+            main.py
 
       - name: Archive macOS app bundle
         run: |
@@ -91,7 +109,16 @@ jobs:
       - name: Build Linux executable
         run: |
           cd software/QubeMonitorApp
-          pyinstaller --onefile --windowed --name QubeMonitor-Linux --icon=qube_monitor.ico --add-data "qube_monitor.ico:." --hidden-import serial.tools.list_ports --hidden-import tkinter --hidden-import tkinter.ttk --hidden-import tkinter.messagebox --hidden-import tkinter.scrolledtext --hidden-import threading --hidden-import time qubeMonitor.py
+          pyinstaller --onefile --windowed --name QubeMonitor-Linux --icon=qube_monitor.ico \
+            --add-data "qube_monitor.ico:." \
+            --add-data "qube_monitor.png:." \
+            --hidden-import serial.tools.list_ports \
+            --hidden-import tkinter --hidden-import tkinter.ttk --hidden-import tkinter.messagebox \
+            --hidden-import tkinter.scrolledtext --hidden-import tkinter.filedialog \
+            --hidden-import threading --hidden-import time --hidden-import queue --hidden-import random \
+            --hidden-import config --hidden-import gui --hidden-import serial_manager \
+            --hidden-import student_manager --hidden-import log_manager \
+            main.py
 
       - name: Upload Linux executable
         uses: actions/upload-artifact@v4

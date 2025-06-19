@@ -1,3 +1,7 @@
+# MicroPython script for Qube Microbit
+def sendStatus(status: str):
+    radio.send_string(convert_to_text("L" + "," + ("" + str(leerlingnummer)) + "," + status))
+    radio.send_string(convert_to_text("L" + "," + ("" + str(leerlingnummer)) + "," + status))
 def animatie():
     basic.show_leds("""
         . . . . .
@@ -146,7 +150,8 @@ lln_cursor2 = 0
 leerlingnummer = 0
 leerlingnummer = parse_float(flashstorage.get_or_default("LEERLINGNUMMER", ""))
 radio.set_group(147)
-status = 5
+radio.set_transmit_power(7)
+status2 = "G"
 if not (leerlingnummer):
     animatie()
     setup()
@@ -154,22 +159,23 @@ else:
     basic.show_string("" + str(leerlingnummer))
 
 def on_forever():
-    global status
+    global status2
     if input.button_is_pressed(Button.A) and input.button_is_pressed(Button.B) and input.logo_is_pressed():
         setup()
     if input.is_gesture(Gesture.SCREEN_DOWN):
-        if status != 0:
-            status = 0
-            radio.send_string(convert_to_text("L" + "," + ("" + str(leerlingnummer)) + "," + "G"))
-            radio.send_string(convert_to_text("L" + "," + ("" + str(leerlingnummer)) + "," + "G"))
+        if status2 != "G":
+            status2 = "G"
+            sendStatus(status2)
     elif input.is_gesture(Gesture.LOGO_UP):
-        if status != 1:
-            status = 1
-            radio.send_string(convert_to_text("L" + "," + ("" + str(leerlingnummer)) + "," + "V"))
-            radio.send_string(convert_to_text("L" + "," + ("" + str(leerlingnummer)) + "," + "V"))
+        if status2 != "V":
+            status2 = "V"
+            sendStatus(status2)
     elif input.is_gesture(Gesture.SCREEN_UP):
-        if status != 2:
-            status = 2
-            radio.send_string(convert_to_text("L" + "," + ("" + str(leerlingnummer)) + "," + "R"))
-            radio.send_string(convert_to_text("L" + "," + ("" + str(leerlingnummer)) + "," + "R"))
+        if status2 != "R":
+            status2 = "R"
+            sendStatus(status2)
 basic.forever(on_forever)
+
+def on_every_interval():
+    sendStatus(status2)
+loops.every_interval(30000, on_every_interval) # Every 30 seconds, send the current status
